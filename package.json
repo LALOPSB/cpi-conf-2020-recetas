@@ -1,5 +1,5 @@
 {
-  "name": "10pines-conf",
+  "name": "cpi-conf-2020-recetas",
   "version": "2.2.0",
   "description": "A Node.js starter for Serverless Framework with ES6 and TypeScript support",
   "main": "handler.js",
@@ -19,7 +19,6 @@
     "serverless-offline": "^5.3.3"
   },
   "dependencies": {
-    "axios": "^0.20.0",
     "uuid": "^8.3.0",
     "winston": "^3.2.1"
   }

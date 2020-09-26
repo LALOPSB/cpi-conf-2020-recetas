@@ -3,7 +3,6 @@ jobs:
   build:
     docker:
       - image: circleci/node:12
-      - image: amazon/dynamodb-local
 
     working_directory: ~/repo
 

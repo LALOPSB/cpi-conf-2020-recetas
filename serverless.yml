@@ -11,7 +11,7 @@ plugins:
 provider:
   name: aws # El nombre del proovedor
   runtime: nodejs12.x # El lenguaje que utilizamos
-  stage: dev # La stage por defecto
+  stage: review # La stage por defecto
   region: us-east-1 # La región de aws
   environment:
     stage: ${self:provider.stage}
