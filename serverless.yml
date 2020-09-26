@@ -1,0 +1,43 @@
+service: cpi-conf-2020-recetas
+
+package:
+  individually: true
+
+plugins:
+  - serverless-bundle
+  - serverless-offline
+  - serverless-dotenv-plugin # Load .env as environment variables (No lo utilizamos en este ejemplo)
+
+provider:
+  name: aws # El nombre del proovedor
+  runtime: nodejs12.x # El lenguaje que utilizamos
+  stage: dev # La stage por defecto
+  region: us-east-1 # La región de aws
+  environment:
+    stage: ${self:provider.stage}
+    tableName: ${ssm:${opt:stage}_TABLE_NAME}
+
+   # Las policies para el role que tendrán nuestras funciones
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "dynamodb:GetItem"
+        - "dynamodb:Query"
+        - "dynamodb:PutItem"
+        - "dynamodb:UpdateItem"
+        - "dynamodb:Scan"
+      Resource: "*"
+
+functions:
+  addRecipe:
+    handler: src/handlers/add.handler
+    events:
+      - http:
+          path: add
+          method: post
+  getRandomRecipe:
+    handler: src/handlers/getRandom.handler
+    events:
+      - http:
+          path: getRandom
+          method: get

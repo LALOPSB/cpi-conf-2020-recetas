@@ -1,0 +1,46 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node:12
+      - image: amazon/dynamodb-local
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - v1-dependencies-
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+
+      - run:
+          name: Instalo Serverless CLI y dependencias
+          command: |
+            sudo npm i -g serverless
+            npm install
+
+      - run: # testeo la branch en que estamos.
+          name: "En qué branch estoy?"
+          command: echo ${CIRCLE_BRANCH}
+
+      # Corro tests!
+      - run:
+          name: Run tests
+          command: npm test --passWithNoTests
+
+      # Deployo la aplicacion
+      - run:
+          name: Deploy application
+          command: |
+            deployStage="review"
+            if [ "${CIRCLE_BRANCH}" == "dev" ] || [ "${CIRCLE_BRANCH}" == "prod"  ]; then
+              deployStage=${CIRCLE_BRANCH}
+            fi
+            sls deploy --stage ${deployStage}
+      - save_cache:
+          paths:
+            - node_modules
+          key: dependencies-cache-{{ checksum "package.json" }}
