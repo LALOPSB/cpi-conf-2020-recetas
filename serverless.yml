@@ -35,9 +35,3 @@ functions:
       - http:
           path: add
           method: post
-  getRandomRecipe:
-    handler: src/handlers/getRandom.handler
-    events:
-      - http:
-          path: getRandom
-          method: get
